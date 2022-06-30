@@ -23,13 +23,13 @@ logging.basicConfig(
 
 
 def main():
-    url, parameters, config_file = open_config_file(config_file_name)
+    url, parameters, config_file = open_config_file()
     if not config_file:
         logging.info("Missing config file or missing required configuration. Looking for arguments.")
         args = parser.parse_args()
         url = args.url
         parameters = args.parameters
-        if args.url == None or args.parameters == None:
+        if args.url is None or args.parameters is None:
             logging.error("Neither config file nor arguments present. Quitting.")
             print_config(url, parameters)
             quit()
@@ -48,10 +48,10 @@ def print_config(url, parameters):
                  f'Parameters: {parameters}')
 
 
-def open_config_file(config_file_name):
+def open_config_file():
     config_file = True
     url = None
-    parameters =  None
+    parameters = None
     try:
         with open(config_file_name, 'r') as file:
             config_kv = yaml.safe_load(file)
@@ -68,6 +68,7 @@ def open_config_file(config_file_name):
             config_file = False
 
     return url, parameters, config_file
+
 
 def get_ipv4_address():
     return requests.request("GET", "https://api4.ipify.org").text
